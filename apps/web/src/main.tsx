@@ -1,7 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "./styles.css";
-import ArticleSection from "./components/ArticleSection";
+import { ArticleSection } from "./features/components/ArticleSection";
 
 
 function App() {

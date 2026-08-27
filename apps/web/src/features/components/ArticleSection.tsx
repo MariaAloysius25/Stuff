@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { createWebApi, ReadLaterController, textual, Article } from "@read-later/core";
 import { ArticleDetail } from "./ArticleDetail";
-import "../styles.css";
+import "./ArticleSection.css";
 
 const api = createWebApi();
 const readLater = new ReadLaterController(api);
@@ -23,7 +23,7 @@ const SaveButton = ({ articleId, note, onSaved }: { articleId: string; note: str
     return <button aria-label={saved ? textual.saved : textual.saveForLater} className={saved ? "save saved" : "save"} disabled={pending} onClick={() => void handleClick()}><span aria-hidden="true">♥</span></button>;
 }
 
-export default function ArticleSection() {
+export function ArticleSection() {
     const [items, setItems] = useState<Article[]>([]);
     const [view, setView] = useState<"feed" | "saved">("feed");
     const [state, setState] = useState(readLater.getState());
@@ -48,13 +48,13 @@ export default function ArticleSection() {
     }, []);
 
     const normalizedQuery = query.trim().toLowerCase();
-    const searched = items.filter((item) => `${item.title} ${item.summary} ${item.section}`.toLowerCase().includes(normalizedQuery));
+    const searched = items.filter((item) => `${item.title} ${item.section}`.toLowerCase().includes(normalizedQuery));
     const filtered = view === "feed" ? searched : searched.filter((item) => state.saved.some((saved) => saved.articleId === item.id));
-    const visible = filtered.slice(0, page * defaultPageSize);
+    const displayedList = filtered.slice(0, page * defaultPageSize);
 
     if (selectedArticle) return <ArticleDetail article={selectedArticle} onBack={() => setSelectedArticle(null)} />;
 
-    return <main>
+    return (<main>
         <header>
             <div>
                 <span className="kicker">{textual.brand}</span>
@@ -70,22 +70,31 @@ export default function ArticleSection() {
             <p className="eyebrow">{view === "feed" ? textual.feedEyebrow : textual.savedEyebrow}</p>
             <h2>{view === "feed" ? textual.feedHeading : textual.savedHeading}</h2>
         </section>
+        {/*  Search input for filtering articles  */}
         <label className="search-label" htmlFor="article-search">{textual.searchLabel}</label>
         <input id="article-search" className="search" value={query} placeholder={textual.searchPlaceholder} onChange={(event) => { setQuery(event.target.value); setPage(1); }} />
-        <section className="feed">{visible.map((article) => <article key={article.id} onClick={() => setSelectedArticle(article)} tabIndex={0} onKeyDown={(event) => { if (event.key === "Enter") setSelectedArticle(article); }}>
-            <img src={article.imageUrl} alt={article.imageAlt} />
-            <div className="article-copy">
-                <div className="meta">
-                    <span>{article.section}</span>
-                    <time>{article.publishedAt}</time>
-                </div><h3>{article.title}</h3><p>{article.summary}</p>
-                <label className="note-label" htmlFor={`note-${article.id}`}>{textual.noteLabel}</label>
-                <input id={`note-${article.id}`} className="note" value={notes[article.id] ?? state.saved.find((saved) => saved.articleId === article.id)?.note ?? ""} placeholder={textual.notePlaceholder} onClick={(event) => event.stopPropagation()} onChange={(event) => setNotes({ ...notes, [article.id]: event.target.value })} />
-                <span onClick={(event) => event.stopPropagation()} onKeyDown={(event) => event.stopPropagation()}><SaveButton articleId={article.id} note={notes[article.id] ?? ""} onSaved={() => setNotes({ ...notes, [article.id]: "" })} /></span>
-                {state.saved.find((saved) => saved.articleId === article.id)?.note && <p className="saved-note">{state.saved.find((saved) => saved.articleId === article.id)?.note}</p>}</div></article>)}{visible.length === 0 && <p className="empty">{textual.emptySaved}</p>}</section>
-        {visible.length < filtered.length ?
-            <button className="show-more" onClick={() => setPage(page + 1)}>{textual.showMore}</button>
-            : <p className="empty">Sorry there is no more content to display.</p>
-        }
-    </main>;
+        {/* Article section */}
+        <section className="feed">{displayedList.map((article) =>
+            <article key={article.id} onClick={() => setSelectedArticle(article)} tabIndex={0} onKeyDown={(event) => { if (event.key === "Enter") setSelectedArticle(article); }}>
+                <img src={article.imageUrl} alt={article.imageAlt} />
+                <div className="article-copy">
+                    <div className="meta">
+                        <span>{article.section}</span>
+                        <time>{article.publishedAt}</time>
+                    </div>
+                    <h3>{article.title}</h3>
+                    <p>{article.summary}</p>
+                    <label className="note-label" htmlFor={`note-${article.id}`}>{textual.noteLabel}</label>
+                    <input id={`note-${article.id}`} maxLength={20} className="note" value={notes[article.id] ?? state.saved.find((saved) => saved.articleId === article.id)?.note ?? ""} placeholder={textual.notePlaceholder} onClick={(event) => event.stopPropagation()} onChange={(event) => setNotes({ ...notes, [article.id]: event.target.value })} />
+                    <span onClick={(event) => event.stopPropagation()} onKeyDown={(event) => event.stopPropagation()}>
+                        <SaveButton articleId={article.id} note={notes[article.id] ?? ""} onSaved={() => setNotes({ ...notes, [article.id]: "" })} />
+                    </span>
+                    {state.saved.find((saved) => saved.articleId === article.id)?.note && <p className="saved-note">{state.saved.find((saved) => saved.articleId === article.id)?.note}</p>}
+                </div>
+            </article>)}
+            {displayedList.length === 0 && <p className="empty">{textual.emptySaved}</p>}
+        </section>
+        {/* Load more */}
+        {displayedList.length < filtered.length && <button className="show-more" onClick={() => setPage(page + 1)}>{textual.showMore}</button>}
+    </main>);
 }

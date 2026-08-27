@@ -11,13 +11,15 @@ export const textual = {
   savedEyebrow: "Your personal shelf",
   feedHeading: "Ideas worth keeping close.",
   savedHeading: "Stories waiting for your attention.",
-  emptySaved: "Nothing saved yet. Find a story in All stories and keep it here.",
-  networkError: "Network request failed. There is slight delay in adding your favourites. Please try again.",
+  emptySaved:
+    "Nothing saved yet. Find a story in All stories and keep it here.",
+  networkError:
+    "Network request failed. There is slight delay in adding your favourites. Please try again.",
   searchLabel: "Search articles",
-  searchPlaceholder: "Search by title, summary, or section",
+  searchPlaceholder: "Search by title or section",
   showMore: "Show more",
   noteLabel: "Note",
   notePlaceholder: "Add a note before saving",
   backToStories: "Back to stories",
   readArticle: "Read article",
-} as const; 
+} as const;
