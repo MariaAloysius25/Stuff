@@ -11,6 +11,7 @@
     "typecheck": "tsc -b packages/core apps/web apps/native",
     "web": "npm --workspace @read-later/web run dev",
     "web-build": "npm --workspace @read-later/web run build",
+    "native": "npm --workspace @read-later/native run start",
     "ios": "npm --workspace @read-later/native run ios",
     "ios-build": "expo build:ios",
     "check": "npm run typecheck && npm run test",
