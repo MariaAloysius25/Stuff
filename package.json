@@ -15,7 +15,8 @@
     "ios": "npm --workspace @read-later/native run ios",
     "ios-build": "expo build:ios",
     "check": "npm run typecheck && npm run test",
-    "check-build-test": "npm run web-build && npm run typecheck && npm test"
+    "check-web-build-test": "npm run web-build && npm run typecheck && npm test",
+    "check-native-build-test": "npm run typecheck && npm test"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",

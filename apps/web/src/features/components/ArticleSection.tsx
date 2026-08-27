@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { createWebApi, ReadLaterController, textual, Article } from "@read-later/core";
+import { createWebApi, ReadLaterController, textual, Article, ReadLaterState } from "@read-later/core";
 import { ArticleDetail } from "./ArticleDetail";
 import "./ArticleSection.css";
 
@@ -11,12 +11,7 @@ params: articleId - the unique identifier of the article to be saved or removed 
 note - the note associated with the article to be saved.
 onSaved - a callback function that is called when the article is successfully saved or removed from the read later list.
 */
-const SaveButton = ({ articleId, note, onSaved }: { articleId: string; note: string; onSaved: () => void }) => {
-    const [state, setState] = useState(readLater.getState());
-    useEffect(() => {
-        const unsubscribe = readLater.subscribe(setState);
-        return () => { unsubscribe(); };
-    }, []);
+const SaveButton = ({ articleId, note, onSaved, state }: { articleId: string; note: string; onSaved: () => void; state: ReadLaterState }) => {
     const saved = state.saved.some((item) => item.articleId === articleId);
     const pending = state.pending.includes(articleId);
     const handleClick = async () => { if (await readLater.toggle(articleId, note)) onSaved(); };
@@ -85,9 +80,9 @@ export function ArticleSection() {
                     <h3>{article.title}</h3>
                     <p>{article.summary}</p>
                     <label className="note-label" htmlFor={`note-${article.id}`}>{textual.noteLabel}</label>
-                    <input id={`note-${article.id}`} maxLength={20} className="note" value={notes[article.id] ?? state.saved.find((saved) => saved.articleId === article.id)?.note ?? ""} placeholder={textual.notePlaceholder} onClick={(event) => event.stopPropagation()} onChange={(event) => setNotes({ ...notes, [article.id]: event.target.value })} />
+                    <input id={`note-${article.id}`} maxLength={20} className="note" value={notes[article.id] ?? state.saved.find((saved) => saved.articleId === article.id)?.note ?? ""} placeholder={textual.notePlaceholder} onClick={(event) => event.stopPropagation()} onChange={(event) => setNotes((current) => ({ ...current, [article.id]: event.target.value }))} />
                     <span onClick={(event) => event.stopPropagation()} onKeyDown={(event) => event.stopPropagation()}>
-                        <SaveButton articleId={article.id} note={notes[article.id] ?? ""} onSaved={() => setNotes({ ...notes, [article.id]: "" })} />
+                        <SaveButton articleId={article.id} note={notes[article.id] ?? ""} state={state} onSaved={() => setNotes((current) => ({ ...current, [article.id]: "" }))} />
                     </span>
                     {state.saved.find((saved) => saved.articleId === article.id)?.note && <p className="saved-note">{state.saved.find((saved) => saved.articleId === article.id)?.note}</p>}
                 </div>

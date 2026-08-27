@@ -28,15 +28,26 @@ describe("ReadLaterController", () => {
     expect(second.isSaved("tide")).toBe(true);
   });
 
-  it("does not overwrite persisted saves when a mutation beats hydration", async () => {
-    const storage = new MemoryStorage();
-    const existing = new FakeApi(storage, 0);
-    await existing.save("common");
-    const fresh = new FakeApi(storage, 0);
-    await fresh.save("orbit");
-    expect(
-      (await fresh.getReadLater()).items.map((item) => item.articleId),
-    ).toEqual(["common", "orbit"]);
+  it("does not overwrite an optimistic mutation when hydration finishes later", async () => {
+    let finishHydration!: (value: { items: never[] }) => void;
+    const hydration = new Promise<{ items: never[] }>((resolve) => {
+      finishHydration = resolve;
+    });
+    const controller = new ReadLaterController({
+      getReadLater: () => hydration,
+      save: async () => 201,
+      remove: async () => 204,
+    });
+
+    const hydrationRequest = controller.hydrate();
+    const mutationRequest = controller.toggle("signal");
+    expect(controller.isSaved("signal")).toBe(true);
+
+    finishHydration({ items: [] });
+    await hydrationRequest;
+    expect(await mutationRequest).toBe(true);
+
+    expect(controller.isSaved("signal")).toBe(true);
   });
 
   it("makes repeated save and remove requests idempotent", async () => {

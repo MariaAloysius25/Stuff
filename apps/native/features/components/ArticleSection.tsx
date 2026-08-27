@@ -7,7 +7,15 @@ import { ArticleDetail } from "./ArticleDetail";
 import { styles } from "./ArticleSection.styles";
 
 const storage: StorageAdapter = {
-    async read() { const value = await AsyncStorage.getItem("read-later:saved"); return value ? JSON.parse(value) as SavedArticle[] : []; },
+    async read() {
+        try {
+            const value = await AsyncStorage.getItem("read-later:saved");
+            const parsed: unknown = value ? JSON.parse(value) : [];
+            return Array.isArray(parsed) ? parsed as SavedArticle[] : [];
+        } catch {
+            return [];
+        }
+    },
     async write(items) { await AsyncStorage.setItem("read-later:saved", JSON.stringify(items)); }
 };
 const api = new FakeApi(storage);
@@ -55,7 +63,7 @@ const ArticleSection = () => {
             <Text style={styles.heading}>{showSaved ? textual.savedHeading : textual.feedHeading}</Text>
         </View>
         <TextInput accessibilityLabel={textual.searchLabel} style={styles.search} value={query} placeholder={textual.searchPlaceholder} onChangeText={(value) => { setQuery(value); setPage(1); }} />
-        <FlatList data={visible} keyExtractor={(item) => item.id} contentContainerStyle={styles.list} ListEmptyComponent={<Text style={styles.empty}>{textual.emptySaved}</Text>} renderItem={({ item }) => { const isSaved = saved.saved.some((entry) => entry.articleId === item.id); const pending = saved.pending.includes(item.id); const note = notes[item.id] ?? saved.saved.find((entry) => entry.articleId === item.id)?.note ?? ""; const savedNote = saved.saved.find((entry) => entry.articleId === item.id)?.note; const save = async () => { if (await readLater.toggle(item.id, note)) setNotes({ ...notes, [item.id]: "" }); }; return <Pressable accessibilityRole="button" accessibilityLabel={`${textual.readArticle}: ${item.title}`} onPress={() => setSelectedArticle(item)} style={styles.card}><Text style={styles.section}>{item.section}  ·  {item.publishedAt}</Text><Text style={styles.cardTitle}>{item.title}</Text><Text style={styles.summary}>{item.summary}</Text><Text style={styles.noteLabel}>{textual.noteLabel}</Text><TextInput accessibilityLabel={`${textual.noteLabel}: ${item.title}`} maxLength={20} style={styles.note} value={note} placeholder={textual.notePlaceholder} onChangeText={(value) => setNotes({ ...notes, [item.id]: value })} onPressIn={(event) => event.stopPropagation()} /><Pressable accessibilityRole="button" accessibilityLabel={isSaved ? textual.saved : textual.saveForLater} disabled={pending} style={[styles.button, isSaved && styles.savedButton]} onPress={(event) => { event.stopPropagation(); void save(); }}><Text style={styles.heart}>{"♥"}</Text></Pressable>{savedNote && <Text style={styles.savedNote}>{savedNote}</Text>}</Pressable>; }} ListFooterComponent={visible.length < filtered.length ? <Pressable style={styles.showMore} onPress={() => setPage(page + 1)}><Text style={styles.showMoreText}>{textual.showMore}</Text></Pressable> : null} /></SafeAreaView>;
+        <FlatList data={visible} keyExtractor={(item) => item.id} contentContainerStyle={styles.list} ListEmptyComponent={<Text style={styles.empty}>{textual.emptySaved}</Text>} renderItem={({ item }) => { const isSaved = saved.saved.some((entry) => entry.articleId === item.id); const pending = saved.pending.includes(item.id); const note = notes[item.id] ?? saved.saved.find((entry) => entry.articleId === item.id)?.note ?? ""; const savedNote = saved.saved.find((entry) => entry.articleId === item.id)?.note; const save = async () => { if (await readLater.toggle(item.id, note)) setNotes((current) => ({ ...current, [item.id]: "" })); }; return <Pressable accessibilityRole="button" accessibilityLabel={`${textual.readArticle}: ${item.title}`} onPress={() => setSelectedArticle(item)} style={styles.card}><Text style={styles.section}>{item.section}  ·  {item.publishedAt}</Text><Text style={styles.cardTitle}>{item.title}</Text><Text style={styles.summary}>{item.summary}</Text><Text style={styles.noteLabel}>{textual.noteLabel}</Text><TextInput accessibilityLabel={`${textual.noteLabel}: ${item.title}`} maxLength={20} style={styles.note} value={note} placeholder={textual.notePlaceholder} onChangeText={(value) => setNotes((current) => ({ ...current, [item.id]: value }))} onPressIn={(event) => event.stopPropagation()} /><Pressable accessibilityRole="button" accessibilityLabel={isSaved ? textual.saved : textual.saveForLater} disabled={pending} style={[styles.button, isSaved && styles.savedButton]} onPress={(event) => { event.stopPropagation(); void save(); }}><Text style={styles.heart}>{"♥"}</Text></Pressable>{savedNote && <Text style={styles.savedNote}>{savedNote}</Text>}</Pressable>; }} ListFooterComponent={visible.length < filtered.length ? <Pressable style={styles.showMore} onPress={() => setPage(page + 1)}><Text style={styles.showMoreText}>{textual.showMore}</Text></Pressable> : null} /></SafeAreaView>;
 
 }
 
