@@ -1,0 +1,91 @@
+import { useEffect, useState } from "react";
+import { createWebApi, ReadLaterController, textual, Article } from "@read-later/core";
+import { ArticleDetail } from "./ArticleDetail";
+import "../styles.css";
+
+const api = createWebApi();
+const readLater = new ReadLaterController(api);
+/*
+SaveButton component is responsible for rendering the save button for each article. 
+params: articleId - the unique identifier of the article to be saved or removed from the read later list.
+note - the note associated with the article to be saved.
+onSaved - a callback function that is called when the article is successfully saved or removed from the read later list.
+*/
+const SaveButton = ({ articleId, note, onSaved }: { articleId: string; note: string; onSaved: () => void }) => {
+    const [state, setState] = useState(readLater.getState());
+    useEffect(() => {
+        const unsubscribe = readLater.subscribe(setState);
+        return () => { unsubscribe(); };
+    }, []);
+    const saved = state.saved.some((item) => item.articleId === articleId);
+    const pending = state.pending.includes(articleId);
+    const handleClick = async () => { if (await readLater.toggle(articleId, note)) onSaved(); };
+    return <button aria-label={saved ? textual.saved : textual.saveForLater} className={saved ? "save saved" : "save"} disabled={pending} onClick={() => void handleClick()}><span aria-hidden="true">♥</span></button>;
+}
+
+export default function ArticleSection() {
+    const [items, setItems] = useState<Article[]>([]);
+    const [view, setView] = useState<"feed" | "saved">("feed");
+    const [state, setState] = useState(readLater.getState());
+    const [query, setQuery] = useState("");
+    const [page, setPage] = useState(1);
+    const [notes, setNotes] = useState<Record<string, string>>({});
+    const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
+    const defaultPageSize = 6; // Number of articles to load per page
+
+    useEffect(() => {
+        void api.getArticles()
+            .then((result) => {
+                const updatedItems = result.items.map((item) => {
+                    const imageAlt = `${item.section}-${item.id}`;
+                    return { ...item, imageAlt };
+                });
+                setItems(updatedItems);
+            });
+        void readLater.hydrate();
+        const unsubscribe = readLater.subscribe(setState);
+        return () => { unsubscribe(); };
+    }, []);
+
+    const normalizedQuery = query.trim().toLowerCase();
+    const searched = items.filter((item) => `${item.title} ${item.summary} ${item.section}`.toLowerCase().includes(normalizedQuery));
+    const filtered = view === "feed" ? searched : searched.filter((item) => state.saved.some((saved) => saved.articleId === item.id));
+    const visible = filtered.slice(0, page * defaultPageSize);
+
+    if (selectedArticle) return <ArticleDetail article={selectedArticle} onBack={() => setSelectedArticle(null)} />;
+
+    return <main>
+        <header>
+            <div>
+                <span className="kicker">{textual.brand}</span>
+                <h1>{textual.pageTitle}</h1>
+            </div>
+            <div className="tabs">
+                <button className={view === "feed" ? "active" : ""} onClick={() => setView("feed")}>{textual.allStories}</button>
+                <button className={view === "saved" ? "active" : ""} onClick={() => setView("saved")}>{textual.savedTab} <b>{state.saved.length}</b></button>
+            </div>
+        </header>
+        {state.error && <div className="notice" role="status">{state.error}. <button onClick={() => readLater.clearError()}>{textual.dismiss}</button></div>}
+        <section className="intro">
+            <p className="eyebrow">{view === "feed" ? textual.feedEyebrow : textual.savedEyebrow}</p>
+            <h2>{view === "feed" ? textual.feedHeading : textual.savedHeading}</h2>
+        </section>
+        <label className="search-label" htmlFor="article-search">{textual.searchLabel}</label>
+        <input id="article-search" className="search" value={query} placeholder={textual.searchPlaceholder} onChange={(event) => { setQuery(event.target.value); setPage(1); }} />
+        <section className="feed">{visible.map((article) => <article key={article.id} onClick={() => setSelectedArticle(article)} tabIndex={0} onKeyDown={(event) => { if (event.key === "Enter") setSelectedArticle(article); }}>
+            <img src={article.imageUrl} alt={article.imageAlt} />
+            <div className="article-copy">
+                <div className="meta">
+                    <span>{article.section}</span>
+                    <time>{article.publishedAt}</time>
+                </div><h3>{article.title}</h3><p>{article.summary}</p>
+                <label className="note-label" htmlFor={`note-${article.id}`}>{textual.noteLabel}</label>
+                <input id={`note-${article.id}`} className="note" value={notes[article.id] ?? state.saved.find((saved) => saved.articleId === article.id)?.note ?? ""} placeholder={textual.notePlaceholder} onClick={(event) => event.stopPropagation()} onChange={(event) => setNotes({ ...notes, [article.id]: event.target.value })} />
+                <span onClick={(event) => event.stopPropagation()} onKeyDown={(event) => event.stopPropagation()}><SaveButton articleId={article.id} note={notes[article.id] ?? ""} onSaved={() => setNotes({ ...notes, [article.id]: "" })} /></span>
+                {state.saved.find((saved) => saved.articleId === article.id)?.note && <p className="saved-note">{state.saved.find((saved) => saved.articleId === article.id)?.note}</p>}</div></article>)}{visible.length === 0 && <p className="empty">{textual.emptySaved}</p>}</section>
+        {visible.length < filtered.length ?
+            <button className="show-more" onClick={() => setPage(page + 1)}>{textual.showMore}</button>
+            : <p className="empty">Sorry there is no more content to display.</p>
+        }
+    </main>;
+}

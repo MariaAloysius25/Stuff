@@ -1,0 +1,26 @@
+{
+  "name": "read-later-mini",
+  "private": true,
+  "workspaces": [
+    "packages/core",
+    "apps/web",
+    "apps/native"
+  ],
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc -b packages/core apps/web apps/native",
+    "web": "npm --workspace @read-later/web run dev",
+    "web-build": "npm --workspace @read-later/web run build",
+    "ios": "npm --workspace @read-later/native run ios",
+    "ios-build": "expo build:ios",
+    "check": "npm run typecheck && npm run test",
+    "check-build-test": "npm run web-build && npm run typecheck && npm test"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "react": "19.1.0",
+    "react-native": "0.81.5",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

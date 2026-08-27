@@ -1,0 +1,270 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@600;700&display=swap");
+:root {
+  color: #17221d;
+  background: #f4f0e8;
+  font-family: "DM Sans", sans-serif;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+main {
+  max-width: 1080px;
+  margin: auto;
+  padding: 44px 28px 80px;
+}
+header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  border-bottom: 1px solid #c9c4b9;
+  padding-bottom: 20px;
+}
+h1,
+h2,
+h3 {
+  font-family: "Playfair Display", serif;
+  margin: 0;
+}
+h1 {
+  font-size: 35px;
+}
+.kicker,
+.eyebrow,
+.meta {
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 11px;
+  font-weight: 700;
+}
+.kicker {
+  color: #bd4e32;
+}
+.tabs {
+  display: flex;
+  gap: 8px;
+}
+button {
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+}
+.tabs button {
+  background: transparent;
+  padding: 10px 12px;
+  color: #65706a;
+}
+.tabs button.active {
+  color: #17221d;
+  border-bottom: 2px solid #bd4e32;
+}
+.tabs b {
+  color: #bd4e32;
+}
+.intro {
+  padding: 70px 0 34px;
+  max-width: 650px;
+}
+.eyebrow {
+  color: #bd4e32;
+  margin: 0 0 12px;
+}
+h2 {
+  font-size: clamp(36px, 6vw, 68px);
+  line-height: 1.02;
+  font-weight: 600;
+}
+.feed {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 34px 24px;
+}
+article {
+  background: #fffdf8;
+  border: 1px solid #ddd7ca;
+  display: grid;
+  grid-template-columns: 42% 58%;
+  min-height: 240px;
+}
+article img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  min-height: 240px;
+}
+.article-copy {
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+.meta {
+  display: flex;
+  gap: 12px;
+  color: #bd4e32;
+}
+.meta time {
+  color: #879088;
+}
+h3 {
+  font-size: 26px;
+  line-height: 1.08;
+  margin: 14px 0 10px;
+}
+.article-copy p {
+  color: #65706a;
+  line-height: 1.5;
+  margin: 0 0 18px;
+}
+.save {
+  margin-top: auto;
+  padding: 9px 13px;
+  color: #fffdf8;
+  background: #17221d;
+  font-size: 12px;
+}
+.save.saved {
+  background: #bd4e32;
+}
+.save:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+.notice {
+  background: #f3d9c8;
+  padding: 12px 16px;
+  margin-top: 20px;
+  color: #7e2f21;
+}
+.notice button {
+  background: none;
+  text-decoration: underline;
+  color: inherit;
+}
+.empty {
+  color: #65706a;
+  padding: 30px 0;
+}
+.search-label,
+.note-label {
+  display: block;
+  color: #65706a;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.search-label {
+  margin-bottom: 7px;
+}
+.search {
+  width: 100%;
+  padding: 13px 14px;
+  margin-bottom: 28px;
+  border: 1px solid #c9c4b9;
+  background: #fffdf8;
+  color: #17221d;
+  font: inherit;
+}
+.note-label {
+  margin-bottom: 5px;
+}
+.note {
+  width: 100%;
+  padding: 9px;
+  border: 1px solid #ddd7ca;
+  background: #f4f0e8;
+  color: #17221d;
+  font: inherit;
+  margin-bottom: 14px;
+}
+.saved-note {
+  color: #bd4e32 !important;
+  font-size: 12px;
+  font-style: italic;
+  order: 5;
+}
+.show-more {
+  display: block;
+  margin: 30px auto 0;
+  padding: 11px 18px;
+  background: #17221d;
+  color: #fffdf8;
+}
+.save {
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 23px;
+  line-height: 1;
+}
+.save:not(.saved) {
+  color: #dd234c;
+  background: transparent;
+  border: 1px solid #bd4e32;
+}
+.detail-page {
+  max-width: 800px;
+  margin: auto;
+  padding: 36px 28px 80px;
+}
+.back {
+  background: transparent;
+  color: #bd4e32;
+  padding: 0;
+  margin-bottom: 24px;
+}
+.detail-image {
+  width: 100%;
+  max-height: 420px;
+  object-fit: cover;
+}
+.detail-meta {
+  color: #bd4e32;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 12px;
+  margin-top: 24px;
+}
+.detail-meta span {
+  color: #879088;
+  margin-left: 12px;
+}
+.detail-page h2 {
+  margin: 14px 0;
+}
+.detail-summary {
+  font-size: 20px;
+  color: #65706a;
+  line-height: 1.5;
+}
+.detail-content {
+  max-width: 650px;
+  font-size: 18px;
+  line-height: 1.75;
+}
+@media (max-width: 720px) {
+  main {
+    padding: 28px 16px 50px;
+  }
+  header {
+    align-items: start;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .intro {
+    padding: 52px 0 28px;
+  }
+  .feed {
+    grid-template-columns: 1fr;
+  }
+  article {
+    grid-template-columns: 35% 65%;
+  }
+  h3 {
+    font-size: 23px;
+  }
+}
