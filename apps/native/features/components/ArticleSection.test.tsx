@@ -19,8 +19,10 @@ vi.mock("react-native", () => {
     return {
         FlatList: ({ data, renderItem, ListEmptyComponent, ListFooterComponent, ...props }: { data: typeof article[]; renderItem: (args: { item: typeof article }) => React.ReactNode; ListEmptyComponent?: React.ReactNode; ListFooterComponent?: React.ReactNode }) => React.createElement("FlatList", props, data.length ? data.map((item) => React.createElement(React.Fragment, { key: item.id }, renderItem({ item }))) : ListEmptyComponent, ListFooterComponent),
         Pressable: createPrimitive("Pressable"),
+        Image: createPrimitive("Image"),
         Text: createPrimitive("Text"),
         TextInput: createPrimitive("TextInput"),
+        ScrollView: createPrimitive("ScrollView"),
         View: createPrimitive("View"),
         StyleSheet: { create: (styles: object) => styles },
     };
@@ -55,6 +57,7 @@ vi.mock("@read-later/core", () => {
 });
 
 import ArticleSection from "./ArticleSection";
+import { ArticleDetail } from "./ArticleDetail";
 
 beforeEach(() => vi.clearAllMocks());
 
@@ -66,5 +69,13 @@ describe("native ArticleSection", () => {
         expect(renderer.root.findByProps({ children: article.title })).toBeTruthy();
         expect(renderer.root.findByProps({ accessibilityLabel: `Note: ${article.title}` })).toBeTruthy();
         expect(renderer.root.findByProps({ accessibilityLabel: "Add To Favorites" })).toBeTruthy();
+        expect(renderer.root.findByProps({ accessibilityLabel: article.title })).toBeTruthy();
+    });
+
+    it("renders the detail image with an accessible label", () => {
+        let renderer!: TestRenderer.ReactTestRenderer;
+        act(() => { renderer = TestRenderer.create(<ArticleDetail article={article} onBack={() => undefined} />); });
+
+        expect(renderer.root.findByProps({ accessibilityLabel: article.title })).toBeTruthy();
     });
 });

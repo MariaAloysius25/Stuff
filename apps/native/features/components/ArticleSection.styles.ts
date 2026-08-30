@@ -36,6 +36,7 @@ export const styles = StyleSheet.create({
     borderColor: "#ddd7ca",
     padding: 18,
   },
+  cardImage: { width: "100%", height: 150, marginBottom: 14 },
   section: {
     color: "#bd4e32",
     fontSize: 11,
