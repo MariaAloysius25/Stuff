@@ -15,7 +15,7 @@ const SaveButton = ({ articleId, note, onSaved, state }: { articleId: string; no
     const saved = state.saved.some((item) => item.articleId === articleId);
     const pending = state.pending.includes(articleId);
     const handleClick = async () => { if (await readLater.toggle(articleId, note)) onSaved(); };
-    return <button aria-label={saved ? textual.saved : textual.saveForLater} className={saved ? "save saved" : "save"} disabled={pending} onClick={() => void handleClick()}><span aria-hidden="true">♥</span></button>;
+    return <button aria-label={saved ? textual.saved : textual.saveForLater} aria-pressed={saved} className={saved ? "save saved" : "save"} disabled={pending} onClick={() => void handleClick()}><span aria-hidden="true">♥</span></button>;
 }
 
 export function ArticleSection() {
@@ -32,7 +32,7 @@ export function ArticleSection() {
         void api.getArticles()
             .then((result) => {
                 const updatedItems = result.items.map((item) => {
-                    const imageAlt = `${item.section}-${item.id}`;
+                    const imageAlt = item.imageAlt ?? item.title;
                     return { ...item, imageAlt };
                 });
                 setItems(updatedItems);
@@ -55,9 +55,9 @@ export function ArticleSection() {
                 <span className="kicker">{textual.brand}</span>
                 <h1>{textual.pageTitle}</h1>
             </div>
-            <div className="tabs">
-                <button className={view === "feed" ? "active" : ""} onClick={() => setView("feed")}>{textual.allStories}</button>
-                <button className={view === "saved" ? "active" : ""} onClick={() => setView("saved")}>{textual.savedTab} <b>{state.saved.length}</b></button>
+            <div className="tabs" aria-label="Article views">
+                <button aria-pressed={view === "feed"} className={view === "feed" ? "active" : ""} onClick={() => setView("feed")}>{textual.allStories}</button>
+                <button aria-pressed={view === "saved"} className={view === "saved" ? "active" : ""} onClick={() => setView("saved")}>{textual.savedTab} <b aria-hidden="true">{state.saved.length}</b></button>
             </div>
         </header>
         {state.error && <div className="notice" role="status">{state.error}. <button onClick={() => readLater.clearError()}>{textual.dismiss}</button></div>}
@@ -67,23 +67,21 @@ export function ArticleSection() {
         </section>
         {/*  Search input for filtering articles  */}
         <label className="search-label" htmlFor="article-search">{textual.searchLabel}</label>
-        <input id="article-search" className="search" value={query} placeholder={textual.searchPlaceholder} onChange={(event) => { setQuery(event.target.value); setPage(1); }} />
+        <input id="article-search" type="search" className="search" value={query} placeholder={textual.searchPlaceholder} onChange={(event) => { setQuery(event.target.value); setPage(1); }} />
         {/* Article section */}
         <section className="feed">{displayedList.map((article) =>
-            <article key={article.id} onClick={() => setSelectedArticle(article)} tabIndex={0} onKeyDown={(event) => { if (event.key === "Enter") setSelectedArticle(article); }}>
-                <img src={article.imageUrl} alt={article.imageAlt} />
+            <article key={article.id}>
+                <img src={article.imageUrl} alt={article.imageAlt?.trim() || `Illustration for ${article.title}`} />
                 <div className="article-copy">
                     <div className="meta">
                         <span>{article.section}</span>
-                        <time>{article.publishedAt}</time>
+                        <time dateTime={article.publishedAt}>{article.publishedAt}</time>
                     </div>
-                    <h3>{article.title}</h3>
+                    <h3><button className="article-title" aria-label={`${textual.readArticle}: ${article.title}`} onClick={() => setSelectedArticle(article)}>{article.title}</button></h3>
                     <p>{article.summary}</p>
                     <label className="note-label" htmlFor={`note-${article.id}`}>{textual.noteLabel}</label>
-                    <input id={`note-${article.id}`} maxLength={20} className="note" value={notes[article.id] ?? state.saved.find((saved) => saved.articleId === article.id)?.note ?? ""} placeholder={textual.notePlaceholder} onClick={(event) => event.stopPropagation()} onChange={(event) => setNotes((current) => ({ ...current, [article.id]: event.target.value }))} />
-                    <span onClick={(event) => event.stopPropagation()} onKeyDown={(event) => event.stopPropagation()}>
-                        <SaveButton articleId={article.id} note={notes[article.id] ?? ""} state={state} onSaved={() => setNotes((current) => ({ ...current, [article.id]: "" }))} />
-                    </span>
+                    <input id={`note-${article.id}`} maxLength={20} className="note" value={notes[article.id] ?? state.saved.find((saved) => saved.articleId === article.id)?.note ?? ""} placeholder={textual.notePlaceholder} aria-label={textual.noteLabel} onChange={(event) => setNotes((current) => ({ ...current, [article.id]: event.target.value }))} />
+                    <SaveButton articleId={article.id} note={notes[article.id] ?? ""} state={state} onSaved={() => setNotes((current) => ({ ...current, [article.id]: "" }))} />
                     {state.saved.find((saved) => saved.articleId === article.id)?.note && <p className="saved-note">{state.saved.find((saved) => saved.articleId === article.id)?.note}</p>}
                 </div>
             </article>)}

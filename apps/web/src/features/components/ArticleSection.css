@@ -113,6 +113,17 @@ h3 {
   line-height: 1.08;
   margin: 14px 0 10px;
 }
+.article-title {
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+.article-title:hover,
+.article-title:focus-visible {
+  text-decoration: underline;
+}
 .article-copy p {
   color: #65706a;
   line-height: 1.5;
@@ -229,11 +240,11 @@ h3 {
   font-size: 12px;
   margin-top: 24px;
 }
-.detail-meta span {
+.detail-meta time {
   color: #879088;
   margin-left: 12px;
 }
-.detail-page h2 {
+.detail-page h1 {
   margin: 14px 0;
 }
 .detail-summary {
