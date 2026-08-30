@@ -5,7 +5,7 @@ export function ArticleDetail({ article, onBack }: { article: Article; onBack: (
 
     return <main className="detail-page">
         <button className="back" onClick={onBack}>&larr; {textual.backToStories}</button>
-        <img className="detail-image" src={article.imageUrl} alt={imageAlt} />
+        <img className="detail-image" src={article.imageUrl} alt={imageAlt || "Image detail"} />
         <div className="detail-meta">{article.section}
             <time dateTime={article.publishedAt}>{article.publishedAt}</time>
         </div>

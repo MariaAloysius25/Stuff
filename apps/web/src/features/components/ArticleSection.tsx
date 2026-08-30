@@ -55,7 +55,7 @@ export function ArticleSection() {
                 <span className="kicker">{textual.brand}</span>
                 <h1>{textual.pageTitle}</h1>
             </div>
-            <div className="tabs" aria-label="Article views">
+            <div className="tabs" >
                 <button aria-pressed={view === "feed"} className={view === "feed" ? "active" : ""} onClick={() => setView("feed")}>{textual.allStories}</button>
                 <button aria-pressed={view === "saved"} className={view === "saved" ? "active" : ""} onClick={() => setView("saved")}>{textual.savedTab} <b aria-hidden="true">{state.saved.length}</b></button>
             </div>
@@ -67,7 +67,7 @@ export function ArticleSection() {
         </section>
         {/*  Search input for filtering articles  */}
         <label className="search-label" htmlFor="article-search">{textual.searchLabel}</label>
-        <input id="article-search" type="search" className="search" value={query} placeholder={textual.searchPlaceholder} onChange={(event) => { setQuery(event.target.value); setPage(1); }} />
+        <input id="article-search" type="search" aria-label="Search articles" className="search" value={query} placeholder={textual.searchPlaceholder} onChange={(event) => { setQuery(event.target.value); setPage(1); }} />
         {/* Article section */}
         <section className="feed">{displayedList.map((article) =>
             <article key={article.id}>
@@ -90,4 +90,4 @@ export function ArticleSection() {
         {/* Load more */}
         {displayedList.length < filtered.length && <button className="show-more" onClick={() => setPage(page + 1)}>{textual.showMore}</button>}
     </main>);
-}
+}   
