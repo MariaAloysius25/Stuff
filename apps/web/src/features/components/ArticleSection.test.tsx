@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { ArticleDetail } from "./ArticleDetail";
 import { ArticleSection } from "./ArticleSection";
 
 beforeEach(() => {
@@ -16,6 +17,8 @@ describe("web ArticleSection", () => {
         render(<ArticleSection />);
 
         await waitFor(() => expect(screen.getByText("The quiet return of the personal computer")).toBeTruthy());
+        expect(screen.getByRole("img", { name: "The quiet return of the personal computer" })).toBeTruthy();
+        expect(screen.getByRole("button", { name: "All stories" }).getAttribute("aria-pressed")).toBe("true");
         fireEvent.change(screen.getByLabelText("Search articles"), {
             target: { value: "technology" },
         });
@@ -39,4 +42,22 @@ describe("web ArticleSection", () => {
 
         expect(screen.getByText("Read this later")).toBeTruthy();
     });
+
+    it("renders an accessible article detail page", () => {
+        render(<ArticleDetail article={{ ...article, imageAlt: "" }} onBack={() => undefined} />);
+
+        expect(screen.getByRole("heading", { level: 1, name: article.title })).toBeTruthy();
+        expect(screen.getByRole("img", { name: `Illustration for ${article.title}` })).toBeTruthy();
+        expect(screen.getByText(article.publishedAt).tagName).toBe("TIME");
+    });
 });
+
+const article = {
+    id: "signal",
+    title: "The quiet return of the personal computer",
+    summary: "Why focused, local-first tools are finding a new audience.",
+    content: "A short article.",
+    publishedAt: "2026-08-24",
+    imageUrl: "https://example.com/signal.jpg",
+    section: "Technology",
+};
