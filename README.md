@@ -21,13 +21,13 @@ npm run check-web-build-test
 npm run check-native-build-test
 
 # Web, in another terminal
-npm --workspace @read-later/web run dev
+npm run web
 
 # Expo / iOS
-npm --workspace @read-later/native run ios
+npm run native
 ```
 
-The web app opens at the URL Vite prints, usually `http://localhost:5173`. The Expo command opens the project in an iOS simulator. The API is an in-process network-like stub, so no server or environment variables are needed.
+The web app opens at the URL Vite prints, usually `http://localhost:5173`. The native command starts Expo; use the Expo CLI prompts to open the project in an iOS simulator or on a device. The API is an in-process network-like stub, so no server or environment variables are needed.
 
 ## Structure
 
