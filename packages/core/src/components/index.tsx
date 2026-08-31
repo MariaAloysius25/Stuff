@@ -1,0 +1,1 @@
+export { FallbackComponent } from "./Fallback";
