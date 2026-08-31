@@ -1,15 +1,15 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { ArticleSection } from "./features/components/ArticleSection";
 import { FallbackComponent } from "@read-later/core";
 import { ErrorBoundary } from "react-error-boundary";
 import { ReadLaterProvider } from "./features/context/ReadLaterContext";
+import { ArticlePage } from "./features/components";
 
 
 function App() {
-    return <ErrorBoundary FallbackComponent={FallbackComponent}  >
+    return <ErrorBoundary FallbackComponent={FallbackComponent}>
         <ReadLaterProvider>
-            <ArticleSection />
+            <ArticlePage />
         </ReadLaterProvider>
     </ErrorBoundary>;
 }
