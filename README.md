@@ -25,6 +25,9 @@ npm run web
 
 # Expo / iOS
 npm run native
+
+# Both web and native
+npm run check-all
 ```
 
 The web app opens at the URL Vite prints, usually `http://localhost:5173`. The native command starts Expo; use the Expo CLI prompts to open the project in an iOS simulator or on a device. The API is an in-process network-like stub, so no server or environment variables are needed.

@@ -16,7 +16,8 @@
     "ios-build": "expo build:ios",
     "check": "npm run typecheck && npm run test",
     "check-web-build-test": "npm run web-build && npm run typecheck && npm test",
-    "check-native-build-test": "npm run typecheck && npm test"
+    "check-native-build-test": "npm run typecheck && npm test",
+    "check-all": "npm run check-web-build-test && npm run check-native-build-test"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
