@@ -53,6 +53,18 @@ vi.mock("@read-later/core", () => {
             emptySaved: "Nothing saved yet.", searchLabel: "Search articles", searchPlaceholder: "Search by title or section",
             showMore: "Show more", noteLabel: "Note", notePlaceholder: "Add a note before saving", readArticle: "Read article",
         },
+        common: { defaultPageSize: 6 },
+        useArticleList: () => ({
+            items: [article],
+            query: "",
+            setQuery: vi.fn(),
+            page: 1,
+            setPage: vi.fn(),
+            state,
+            displayedList: [article],
+            searchedList: [article],
+            filteredList: [article],
+        }),
     };
 });
 

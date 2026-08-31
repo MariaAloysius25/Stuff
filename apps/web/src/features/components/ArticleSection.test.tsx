@@ -22,7 +22,6 @@ describe("web ArticleSection", () => {
         fireEvent.change(screen.getByLabelText("Search articles"), {
             target: { value: "technology" },
         });
-
         expect(screen.getByText("The quiet return of the personal computer")).toBeTruthy();
         expect(screen.queryByText("A field guide to slower cities")).toBeNull();
     });
