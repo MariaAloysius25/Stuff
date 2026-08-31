@@ -3,6 +3,7 @@ import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-li
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { ArticleDetail } from "./ArticleDetail";
 import { ArticleSection } from "./ArticleSection";
+import { ArticlePage } from "./ArticlePage";
 
 beforeEach(() => {
     localStorage.clear();
@@ -13,8 +14,9 @@ afterEach(() => {
 });
 
 describe("web ArticleSection", () => {
+    // Filtering and loading more results is tested in the ArticlePage test
     it("filters articles and loads more results", async () => {
-        render(<ArticleSection />);
+        render(<ArticlePage />);
 
         await waitFor(() => expect(screen.getByText("The quiet return of the personal computer")).toBeTruthy());
         expect(screen.getByRole("img", { name: "The quiet return of the personal computer" })).toBeTruthy();
@@ -26,8 +28,9 @@ describe("web ArticleSection", () => {
         expect(screen.queryByText("A field guide to slower cities")).toBeNull();
     });
 
+    // Saving a note and showing it in saved view
     it("saves a note and shows it in the saved view", async () => {
-        render(<ArticleSection />);
+        render(<ArticlePage />);
 
         await waitFor(() => expect(screen.getByText("The quiet return of the personal computer")).toBeTruthy());
         fireEvent.change(document.getElementById("note-signal")!, {
@@ -41,7 +44,7 @@ describe("web ArticleSection", () => {
 
         expect(screen.getByText("Read this later")).toBeTruthy();
     });
-
+    // Article detail page
     it("renders an accessible article detail page", () => {
         render(<ArticleDetail article={{ ...article, imageAlt: "" }} onBack={() => undefined} />);
 
