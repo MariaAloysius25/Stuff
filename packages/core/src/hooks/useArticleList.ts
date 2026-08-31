@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Article, UseArticleListResult } from "../types";
 import { FakeApi } from "../api/fakeapi";
 import { ReadLaterController } from "../index";
-import { common } from "../data/common";
+import { defaultPageSize } from "../constants/strings";
 
 /*
 useArticleList is a custom React hook that manages the state and behavior of an article list. 
@@ -69,7 +69,7 @@ export function useArticleList(
         );
 
   // Paginate the results
-  const displayedList = filteredList.slice(0, page * common.defaultPageSize);
+  const displayedList = filteredList.slice(0, page * defaultPageSize);
 
   return {
     items,

@@ -1,4 +1,4 @@
-export const textual = {
+export const strings = {
   brand: "THE DAILY READS",
   pageTitle: "Read On The Go",
   allStories: "All stories",
@@ -23,3 +23,5 @@ export const textual = {
   backToStories: "Back to stories",
   readArticle: "Read article",
 } as const;
+
+export const defaultPageSize = 6;

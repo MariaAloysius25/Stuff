@@ -1,6 +1,6 @@
-import { textual } from "../common/textual";
+import { strings } from "../constants/strings";
 import { SavedArticle, Article, StorageAdapter } from "../types";
-import { articles } from "../data/articles";
+import { articles } from "../constants/articles";
 
 export class FakeApi {
   private saved: SavedArticle[] = [];
@@ -69,7 +69,7 @@ export class FakeApi {
    */
   private failSometimes() {
     if (this.failureRate > 0 && Math.random() < this.failureRate)
-      throw new Error(textual.networkError);
+      throw new Error(strings.networkError);
   }
 }
 

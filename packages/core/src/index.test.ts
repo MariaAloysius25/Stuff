@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { MemoryStorage, ReadLaterController } from "./index";
-import { textual } from "./common/textual";
+import { strings } from "./constants";
 import { FakeApi } from "./api/fakeapi";
 
 describe("ReadLaterController", () => {
@@ -14,7 +14,7 @@ describe("ReadLaterController", () => {
     expect(controller.isSaved("signal")).toBe(true);
     await request;
     expect(controller.isSaved("signal")).toBe(false);
-    expect(controller.getState().error).toBe(textual.networkError);
+    expect(controller.getState().error).toBe(strings.networkError);
     expect(updates).toEqual([true, false]);
   });
 

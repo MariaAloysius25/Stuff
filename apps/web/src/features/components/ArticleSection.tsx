@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { textual, Article, ReadLaterState, useArticleList } from "@read-later/core";
+import { Article, ReadLaterState, useArticleList, strings } from "@read-later/core";
 import { ArticleDetail } from "./ArticleDetail";
 import "./ArticleSection.css";
 import { useReadLater } from "../context/ReadLaterContext";
@@ -14,7 +14,7 @@ const SaveButton = ({ articleId, note, onSaved, state, controller }: { articleId
     const saved = state.saved.some((item) => item.articleId === articleId);
     const pending = state.pending.includes(articleId);
     const handleClick = async () => { if (await controller.toggle(articleId, note)) onSaved(); };
-    return <button aria-label={saved ? textual.saved : textual.saveForLater} aria-pressed={saved} className={saved ? "save saved" : "save"} disabled={pending} onClick={() => void handleClick()}><span aria-hidden="true">♥</span></button>;
+    return <button aria-label={saved ? strings.saved : strings.saveForLater} aria-pressed={saved} className={saved ? "save saved" : "save"} disabled={pending} onClick={() => void handleClick()}><span aria-hidden="true">♥</span></button>;
 }
 
 export function ArticleSection() {
@@ -30,21 +30,21 @@ export function ArticleSection() {
     return (<main>
         <header>
             <div>
-                <span className="kicker">{textual.brand}</span>
-                <h1>{textual.pageTitle}</h1>
+                <span className="kicker">{strings.brand}</span>
+                <h1>{strings.pageTitle}</h1>
             </div>
             <div className="tabs" >
-                <button aria-pressed={view === "feed"} className={view === "feed" ? "active" : ""} onClick={() => setView("feed")}>{textual.allStories}</button>
-                <button aria-pressed={view === "saved"} className={view === "saved" ? "active" : ""} onClick={() => setView("saved")}>{textual.savedTab} <b aria-hidden="true">{state.saved.length}</b></button>
+                <button aria-pressed={view === "feed"} className={view === "feed" ? "active" : ""} onClick={() => setView("feed")}>{strings.allStories}</button>
+                <button aria-pressed={view === "saved"} className={view === "saved" ? "active" : ""} onClick={() => setView("saved")}>{strings.savedTab} <b aria-hidden="true">{state.saved.length}</b></button>
             </div>
         </header>
-        {state.error && <div className="notice" role="status">{state.error}. <button onClick={() => readLater.clearError()}>{textual.dismiss}</button></div>}
+        {state.error && <div className="notice" role="status">{state.error}. <button onClick={() => readLater.clearError()}>{strings.dismiss}</button></div>}
         <section className="intro">
-            <p className="eyebrow">{view === "feed" ? textual.feedEyebrow : textual.savedEyebrow}</p>
-            <h2>{view === "feed" ? textual.feedHeading : textual.savedHeading}</h2>
+            <p className="eyebrow">{view === "feed" ? strings.feedEyebrow : strings.savedEyebrow}</p>
+            <h2>{view === "feed" ? strings.feedHeading : strings.savedHeading}</h2>
         </section>
-        <label className="search-label" htmlFor="article-search">{textual.searchLabel}</label>
-        <input id="article-search" type="search" aria-label="Search articles" className="search" value={query} placeholder={textual.searchPlaceholder} onChange={(event) => setQuery(event.target.value)} />
+        <label className="search-label" htmlFor="article-search">{strings.searchLabel}</label>
+        <input id="article-search" type="search" aria-label="Search articles" className="search" value={query} placeholder={strings.searchPlaceholder} onChange={(event) => setQuery(event.target.value)} />
 
         <section className="feed">{displayedList.map((article) =>
             <article key={article.id}>
@@ -54,16 +54,16 @@ export function ArticleSection() {
                         <span>{article.section}</span>
                         <time dateTime={article.publishedAt}>{article.publishedAt}</time>
                     </div>
-                    <h3><button className="article-title" aria-label={`${textual.readArticle}: ${article.title}`} onClick={() => setSelectedArticle(article)}>{article.title}</button></h3>
+                    <h3><button className="article-title" aria-label={`${strings.readArticle}: ${article.title}`} onClick={() => setSelectedArticle(article)}>{article.title}</button></h3>
                     <p>{article.summary}</p>
-                    <label className="note-label" htmlFor={`note-${article.id}`}>{textual.noteLabel}</label>
-                    <input id={`note-${article.id}`} maxLength={20} className="note" value={notes[article.id] ?? state.saved.find((saved) => saved.articleId === article.id)?.note ?? ""} placeholder={textual.notePlaceholder} aria-label={textual.noteLabel} onChange={(event) => setNotes((current) => ({ ...current, [article.id]: event.target.value }))} />
+                    <label className="note-label" htmlFor={`note-${article.id}`}>{strings.noteLabel}</label>
+                    <input id={`note-${article.id}`} maxLength={20} className="note" value={notes[article.id] ?? state.saved.find((saved) => saved.articleId === article.id)?.note ?? ""} placeholder={strings.notePlaceholder} aria-label={strings.noteLabel} onChange={(event) => setNotes((current) => ({ ...current, [article.id]: event.target.value }))} />
                     <SaveButton controller={readLater} articleId={article.id} note={notes[article.id] ?? ""} state={state} onSaved={() => setNotes((current) => ({ ...current, [article.id]: "" }))} />
                     {state.saved.find((saved) => saved.articleId === article.id)?.note && <p className="saved-note">{state.saved.find((saved) => saved.articleId === article.id)?.note}</p>}
                 </div>
             </article>)}
-            {displayedList.length === 0 && <p className="empty">{textual.emptySaved}</p>}
+            {displayedList.length === 0 && <p className="empty">{strings.emptySaved}</p>}
         </section>
-        {displayedList.length < filteredList.length && <button className="show-more" onClick={() => setPage(page + 1)}>{textual.showMore}</button>}
+        {displayedList.length < filteredList.length && <button className="show-more" onClick={() => setPage(page + 1)}>{strings.showMore}</button>}
     </main>);
 }

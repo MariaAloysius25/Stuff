@@ -1,11 +1,11 @@
 import React from "react";
-import { Article, textual } from "@read-later/core";
+import { Article, strings } from "@read-later/core";
 import { Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export function ArticleDetail({ article, onBack }: { article: Article; onBack: () => void }) {
     return <SafeAreaView style={styles.screen}><ScrollView contentContainerStyle={styles.content}>
-        <Pressable accessibilityRole="button" accessibilityLabel={textual.backToStories} onPress={onBack}><Text style={styles.back}>{"<"} {textual.backToStories}</Text></Pressable>
+        <Pressable accessibilityRole="button" accessibilityLabel={strings.backToStories} onPress={onBack}><Text style={styles.back}>{"<"} {strings.backToStories}</Text></Pressable>
         <Image source={{ uri: article.imageUrl }} accessibilityLabel={article.imageAlt ?? article.title} style={styles.image} />
         <Text style={styles.section}>{article.section}  ·  {article.publishedAt}</Text>
         <Text accessibilityRole="header" style={styles.title}>{article.title}</Text>

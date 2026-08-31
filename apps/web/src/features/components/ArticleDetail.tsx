@@ -1,10 +1,10 @@
-import { Article, textual } from "@read-later/core";
+import { Article, strings } from "@read-later/core";
 
 export function ArticleDetail({ article, onBack }: { article: Article; onBack: () => void }) {
     const imageAlt = article.imageAlt?.trim() || `Illustration for ${article.title}`;
 
     return <main className="detail-page">
-        <button className="back" onClick={onBack}>&larr; {textual.backToStories}</button>
+        <button className="back" onClick={onBack}>&larr; {strings.backToStories}</button>
         <img className="detail-image" src={article.imageUrl} alt={imageAlt || "Image detail"} />
         <div className="detail-meta">{article.section}
             <time dateTime={article.publishedAt}>{article.publishedAt}</time>

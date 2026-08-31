@@ -46,7 +46,7 @@ vi.mock("@read-later/core", () => {
             async toggle(articleId: string, note: string) { state.saved.push({ articleId, note }); this.listener(); return true; }
             clearError() { state.error = null; this.listener(); }
         },
-        textual: {
+        strings: {
             brand: "THE DAILY READS", pageTitle: "Read On The Go", allStories: "All stories", savedTab: "Saved",
             saveForLater: "Add To Favorites", saved: "Favorited", dismiss: "Dismiss", feedEyebrow: "A considered reading list",
             savedEyebrow: "Your personal shelf", feedHeading: "Ideas worth keeping close.", savedHeading: "Stories waiting for your attention.",
