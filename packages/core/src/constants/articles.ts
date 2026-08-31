@@ -26,7 +26,7 @@ const featuredArticles: Article[] = [
     content:
       "The most interesting technology shift is not always the loudest one. Across studios, homes, and small teams, people are choosing tools that keep their work close, calm, and understandable. This is the beginning of a longer story about making room for concentration.",
     publishedAt: "2026-08-24",
-    imageUrl: createArtImage("The quiet return", "#d9c7ab"),
+    imageUrl: createArtImage("The return", "#d9c7ab"),
     section: "Technology",
   },
   {
@@ -37,7 +37,7 @@ const featuredArticles: Article[] = [
     content:
       "A city reveals itself at walking pace. The overlooked details become visible: the bench that catches afternoon light, the grocer who knows every regular, and the route home that changes with the weather.",
     publishedAt: "2026-08-22",
-    imageUrl: createArtImage("Slower cities", "#d7d3c6"),
+    imageUrl: createArtImage("Slow cities", "#d7d3c6"),
     section: "Culture",
   },
   {
@@ -48,7 +48,7 @@ const featuredArticles: Article[] = [
     content:
       "The places that hold a neighborhood together are often modest. A library table, a community kitchen, or a shared studio can offer something increasingly rare: a reason to be together without needing to buy anything.",
     publishedAt: "2026-08-19",
-    imageUrl: createArtImage("The commons", "#cbd3c2"),
+    imageUrl: createArtImage("Commons", "#cbd3c2"),
     section: "Ideas",
   },
   {
@@ -78,7 +78,7 @@ const featuredArticles: Article[] = [
     content:
       "Enduring products are shaped after the announcement. Teams watch what people actually do, repair the small frictions, and build habits that make quality repeatable long after the spotlight has moved on.",
     publishedAt: "2026-08-11",
-    imageUrl: createArtImage("After launch", "#d6d0c7"),
+    imageUrl: createArtImage("Big launch", "#d6d0c7"),
     section: "Work",
   },
 ];

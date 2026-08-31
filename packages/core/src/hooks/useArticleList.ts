@@ -14,7 +14,7 @@ useArticleList is a custom React hook that manages the state and behavior of an 
 export function useArticleList(
   api: Pick<FakeApi, "getArticles">,
   controller: ReadLaterController,
-  view: "feed" | "saved",
+  view: { view: "feed" | "saved" },
 ): UseArticleListResult {
   const [items, setItems] = useState<Article[]>([]);
   const [state, setState] = useState(controller.getState());
@@ -62,7 +62,7 @@ export function useArticleList(
 
   // Filter by view (feed or saved)
   const filteredList =
-    view === "feed"
+    view.view === "feed"
       ? searchedList
       : searchedList.filter((item) =>
           state.saved.some((saved) => saved.articleId === item.id),

@@ -218,7 +218,7 @@ h3 {
   border: 1px solid #bd4e32;
 }
 .detail-page {
-  max-width: 800px;
+  max-width: 1500px;
   margin: auto;
   padding: 36px 28px 80px;
 }
@@ -253,7 +253,6 @@ h3 {
   line-height: 1.5;
 }
 .detail-content {
-  max-width: 650px;
   font-size: 18px;
   line-height: 1.75;
 }
