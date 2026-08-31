@@ -1,21 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
-import { Article, ReadLaterState } from "../types";
+import { Article, UseArticleListResult } from "../types";
 import { FakeApi } from "../api/fakeapi";
 import { ReadLaterController } from "../index";
 import { common } from "../data/common";
 
-export interface UseArticleListResult {
-  items: Article[];
-  query: string;
-  setQuery: (q: string) => void;
-  page: number;
-  setPage: (p: number) => void;
-  state: ReadLaterState;
-  displayedList: Article[];
-  searchedList: Article[];
-  filteredList: Article[];
-}
-
+/*
+useArticleList is a custom React hook that manages the state and behavior of an article list. 
+@param api - An instance of FakeApi used to fetch articles.
+@param controller - An instance of ReadLaterController used to manage the read later state.
+@param view - A string indicating the current view type, either "feed" or "saved".
+@returns An object containing the article list state, search query, pagination, and filtered lists.
+*/
 export function useArticleList(
   api: Pick<FakeApi, "getArticles">,
   controller: ReadLaterController,
@@ -27,6 +22,7 @@ export function useArticleList(
   const [page, setPage] = useState(1);
 
   // Load articles and subscribe to state changes
+  // adds an alternative for images
   useEffect(() => {
     void api.getArticles().then((result) => {
       const updatedItems = result.items.map((item) => ({
