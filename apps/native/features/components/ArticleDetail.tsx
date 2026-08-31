@@ -3,6 +3,8 @@ import { Article, strings } from "@read-later/core";
 import { Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+/* This component displays the details of a selected article, including its image, section, title, summary, and content.
+    It also provides a back button to return to the previous view. */
 export function ArticleDetail({ article, onBack }: { article: Article; onBack: () => void }) {
     return <SafeAreaView style={styles.screen}><ScrollView contentContainerStyle={styles.content}>
         <Pressable accessibilityRole="button" accessibilityLabel={strings.backToStories} onPress={onBack}><Text style={styles.back}>{"<"} {strings.backToStories}</Text></Pressable>

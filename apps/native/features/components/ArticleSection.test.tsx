@@ -76,7 +76,7 @@ beforeEach(() => vi.clearAllMocks());
 describe("native ArticleSection", () => {
     it("renders the article and exposes its note and save controls", async () => {
         let renderer!: TestRenderer.ReactTestRenderer;
-        await act(async () => { renderer = TestRenderer.create(<ArticleSection />); });
+        await act(async () => { renderer = TestRenderer.create(<ArticleSection view="feed" />); });
 
         expect(renderer.root.findByProps({ children: article.title })).toBeTruthy();
         expect(renderer.root.findByProps({ accessibilityLabel: `Note: ${article.title}` })).toBeTruthy();

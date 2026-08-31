@@ -1,39 +1,21 @@
 import React, { useState } from "react";
 import { FlatList, Image, Pressable, Text, TextInput, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { Article, strings, useArticleList } from "@read-later/core";
 import { ArticleDetail } from "./ArticleDetail";
 import { styles } from "./ArticleSection.styles";
 import { useReadLater } from "../context/ReadLaterContext";
 
-const ArticleSection = () => {
+/* This component displays a list of articles, allowing users to search, view details, 
+and save articles for later reading. It handles both the feed and saved views based on the provided view prop. */
+const ArticleSection = (view: { view: "feed" | "saved" }) => {
     const { api, controller: readLater } = useReadLater();
-    const [showSaved, setShowSaved] = useState(false);
     const [notes, setNotes] = useState<Record<string, string>>({});
     const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
-
-    const { query, setQuery, page, setPage, state, displayedList, filteredList } = useArticleList(api, readLater, showSaved ? "saved" : "feed");
+    const { query, setQuery, page, setPage, state, displayedList, filteredList } = useArticleList(api, readLater, view);
 
     if (selectedArticle) return <ArticleDetail article={selectedArticle} onBack={() => setSelectedArticle(null)} />;
 
-    return <SafeAreaView style={styles.screen}>
-        <View style={styles.header}>
-            <Text accessibilityRole="header" style={styles.overline}>{strings.brand}</Text>
-            <Text accessibilityRole="header" style={styles.title}>{strings.pageTitle}</Text>
-            <View style={styles.tabs}>
-                <Pressable accessibilityRole="tab" accessibilityState={{ selected: !showSaved }} accessibilityLabel={strings.allStories} onPress={() => setShowSaved(false)}>
-                    <Text style={!showSaved ? styles.activeTab : styles.tab}>{strings.allStories}</Text>
-                </Pressable>
-                <Pressable accessibilityRole="tab" accessibilityState={{ selected: showSaved }} accessibilityLabel={strings.savedTab} onPress={() => setShowSaved(true)}>
-                    <Text style={showSaved ? styles.activeTab : styles.tab}>{strings.savedTab} ({state.saved.length})</Text>
-                </Pressable>
-            </View>
-        </View>
-        {state.error && <View accessibilityRole="alert" style={styles.notice}><Text style={styles.error}>{state.error}.</Text><Pressable accessibilityRole="button" accessibilityLabel={strings.dismiss} onPress={() => readLater.clearError()}><Text style={styles.dismiss}>{strings.dismiss}</Text></Pressable></View>}
-        <View style={styles.intro}>
-            <Text style={styles.eyebrow}>{showSaved ? strings.savedEyebrow : strings.feedEyebrow}</Text>
-            <Text accessibilityRole="header" style={styles.heading}>{showSaved ? strings.savedHeading : strings.feedHeading}</Text>
-        </View>
+    return <>
         <TextInput accessibilityRole="search" accessibilityLabel={strings.searchLabel} style={styles.search} value={query} placeholder={strings.searchPlaceholder} onChangeText={(value) => setQuery(value)} />
         <FlatList accessibilityRole="list" data={displayedList} keyExtractor={(item) => item.id} contentContainerStyle={styles.list} ListEmptyComponent={
             <Text style={styles.empty}>{strings.emptySaved}</Text>} renderItem={({ item }) => {
@@ -65,7 +47,7 @@ const ArticleSection = () => {
             ListFooterComponent={displayedList.length < filteredList.length ?
                 <Pressable accessibilityRole="button" style={styles.showMore} onPress={() => setPage(page + 1)}>
                     <Text style={styles.showMoreText}>{strings.showMore}</Text></Pressable> : null} />
-    </SafeAreaView>;
+    </>;
 }
 
 export default ArticleSection;
