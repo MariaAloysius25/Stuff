@@ -6,12 +6,61 @@ A small TypeScript monorepo demonstrating one Read Later feature shared by an Ex
 
 - Node.js 20 or newer
 - npm 10 or newer
-- For iOS: Xcode with an iOS simulator, or the Expo Go app on a device
+- For Expo Go: the Expo Go app on a device or simulator
+- For a local iOS build: macOS, Xcode, and CocoaPods
 
-## Run it
+## Install
 
 ```sh
 npm install
+```
+
+The repository is an npm workspace. Run commands from the repository root. The
+shared `packages/core` package is compiled automatically when either app starts.
+
+## Run the web app
+
+```sh
+npm run web
+```
+
+Open the URL printed by Vite, usually `http://localhost:5173`.
+
+## Run the native app with Expo Go
+
+```sh
+npm run native
+```
+
+Then use the Expo CLI prompt to open the app in a simulator or scan the QR code
+with Expo Go on a device. The native app currently uses Expo SDK 57, so Expo Go
+must support SDK 57. No Expo account login is required for the local server.
+
+If port 8081 is already in use, choose another port when Expo asks, or stop the
+other Expo process first.
+
+## Run a local iOS build
+
+This path requires CocoaPods and an iOS simulator or connected device:
+
+```sh
+brew install cocoapods
+npm --workspace @read-later/native exec -- expo prebuild --platform ios
+npm --workspace @read-later/native exec -- expo run:ios
+```
+
+`expo prebuild` generates the local `ios/` project on a fresh clone, and
+`expo run:ios` installs pods and builds the app in Xcode. Run these commands
+from the repository root.
+
+For a physical device, open the iOS project in Xcode and configure an Apple ID
+under Signing & Capabilities. Expo account login is only needed for Expo
+services such as EAS builds.
+
+## Validate the project
+
+```sh
+# Typecheck and run all tests
 npm run check
 
 # Web build, typecheck, and tests
@@ -30,7 +79,8 @@ npm run native
 npm run check-all
 ```
 
-The web app opens at the URL Vite prints, usually `http://localhost:5173`. The native command starts Expo; use the Expo CLI prompts to open the project in an iOS simulator or on a device. The API is an in-process network-like stub, so no server or environment variables are needed.
+The API is an in-process network-like stub, so no server, API key, or environment
+variables are needed.
 
 ## Structure
 
@@ -40,4 +90,5 @@ The stub adds small delays and a 12% mutation failure rate to make loading and r
 
 The controller applies saves and removes optimistically, tracks pending article IDs, ignores stale hydration responses that began before a mutation, rejects duplicate toggles for an article while its request is pending, and rolls back only the affected article when a mutation fails. Web storage and native storage treat malformed persisted JSON as an empty list.
 
-The native check script validates the native TypeScript boundary and shared tests; it does not launch Expo or replace device-level iOS validation. Use `npm run ios` for that workflow.
+The native check script validates the native TypeScript boundary and shared tests;
+it does not launch Expo or replace device-level iOS validation.
