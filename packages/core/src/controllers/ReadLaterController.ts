@@ -5,9 +5,11 @@ export class ReadLaterController {
   private state: ReadLaterState = { saved: [], pending: [], error: null };
   private listeners = new Set<ReadLaterListener>();
   private mutationRevision = 0;
+
   constructor(
     private readonly api: Pick<FakeApi, "getReadLater" | "save" | "remove">,
   ) {}
+
   getState() {
     return this.state;
   }
@@ -17,6 +19,7 @@ export class ReadLaterController {
       this.listeners.delete(listener);
     };
   }
+
   async hydrate() {
     const revision = this.mutationRevision;
     try {
@@ -40,9 +43,11 @@ export class ReadLaterController {
     }
     this.emit();
   }
+
   isSaved(articleId: string) {
     return this.state.saved.some((item) => item.articleId === articleId);
   }
+
   async toggle(articleId: string, note = "") {
     if (this.state.pending.includes(articleId)) return false;
     this.mutationRevision += 1;
@@ -96,10 +101,12 @@ export class ReadLaterController {
       return false;
     }
   }
+
   clearError() {
     this.state = { ...this.state, error: null };
     this.emit();
   }
+
   private emit() {
     this.listeners.forEach((listener) => listener(this.state));
   }
