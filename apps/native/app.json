@@ -1,1 +1,14 @@
-{ "expo": { "name": "Read Later", "slug": "read-later", "version": "1.0.0", "orientation": "portrait", "ios": { "supportsTablet": true } } }    
+{
+  "expo": {
+    "name": "Read Later",
+    "slug": "read-later",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "ios": {
+      "supportsTablet": true
+    },
+    "plugins": [
+      "expo-status-bar"
+    ]
+  }
+}
