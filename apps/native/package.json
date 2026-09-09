@@ -3,8 +3,8 @@
   "private": true,
   "main": "index.ts",
   "scripts": {
-    "start": "expo start",
-    "ios": "expo start --ios"
+    "start": "tsc -b ../../packages/core && expo start",
+    "ios": "tsc -b ../../packages/core && expo start --ios"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.1.0",
